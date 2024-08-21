@@ -28,6 +28,10 @@ jobs:
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
 
+      - name: check env
+        run: |
+          env
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
