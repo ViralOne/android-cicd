@@ -15,7 +15,7 @@ install_cmdline_tools() {
         unzip -q commandlinetools-linux-11076708_latest.zip
         rm commandlinetools-linux-11076708_latest.zip
         echo "Installing command line tools..."
-        cmdline-tools/bin/sdkmanager --install 'cmdline-tools;latest' --sdk_root=$ANDROID_HOME
+        yes | cmdline-tools/bin/sdkmanager --install 'cmdline-tools;latest' --sdk_root=$ANDROID_HOME
         rm -rf cmdline-tools/
     else
         echo "Command line tools already installed."
