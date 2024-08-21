@@ -27,10 +27,9 @@ jobs:
       - name: setup maestro
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
-
-      - name: check env
-        run: |
-          env
+          echo $ANDROID_HOME
+          export ANDROID_HOME=/usr/lib/android-sdk/
+          echo $ANDROID_HOME
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
