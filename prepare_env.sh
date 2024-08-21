@@ -15,6 +15,8 @@ install_cmdline_tools() {
         unzip -q commandlinetools-linux-11076708_latest.zip
         rm commandlinetools-linux-11076708_latest.zip
         echo "Installing command line tools..."
+        sudo chown $USER:$USER $ANDROID_HOME -R
+        sudo chown $USER:$USER cmdline-tools/ -R
         yes | cmdline-tools/bin/sdkmanager --install 'cmdline-tools;latest' --sdk_root=$ANDROID_HOME
         rm -rf cmdline-tools/
     else
@@ -28,9 +30,5 @@ install_cmdline_tools
 # Install Maestro
 echo "Installing Maestro..."
 curl -Ls "https://get.maestro.mobile.dev" | bash
-
-# Source .bashrc to apply changes
-echo "Sourcing .bashrc..."
-source $HOME/.bashrc
 
 echo "Setup complete."
