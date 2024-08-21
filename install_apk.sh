@@ -3,9 +3,6 @@
 ADB="/usr/bin/adb"
 APK="./wiki.apk"
 
-echo "Installing APK"
-$ADB install $APK
-
 # echo "Starting screenrecord"
 # $ADB emu screenrecord start --time-limit 460 maestro.webm
 if [ ! -f "/usr/local/bin/maestro" ]; then
@@ -30,7 +27,8 @@ adb connect "$device_id"
 # Check if the connection was successful
 if [ $? -eq 0 ]; then
     echo "Successfully connected to $device_id."
-    adb install wiki.apk
+    echo "Installing APK"
+    $ADB install $APK
 else
     echo "Failed to connect to $device_id."
 fi
