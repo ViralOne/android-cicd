@@ -12,10 +12,11 @@ install_cmdline_tools() {
     if [ ! -f "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
         echo "Command line tools not found. Downloading..."
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools/
+        unzip -q commandlinetools-linux-11076708_latest.zip
         rm commandlinetools-linux-11076708_latest.zip
         echo "Installing command line tools..."
-        $ANDROID_HOME/cmdline-tools/bin/sdkmanager --install 'cmdline-tools;latest' --sdk_root=$ANDROID_HOME
+        cmdline-tools/bin/sdkmanager --install 'cmdline-tools;latest' --sdk_root=$ANDROID_HOME
+        rm -rf cmdline-tools/
     else
         echo "Command line tools already installed."
     fi
