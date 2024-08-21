@@ -23,11 +23,11 @@ jobs:
       # - name: Gradle cache
       #   uses: gradle/gradle-build-action@v2
 
-      - uses: dniHze/maestro-test-action@v1
+      # - uses: dniHze/maestro-test-action@v1
           
-      # - name: Setup maestro
-      #   run: |
-      #     curl -Ls "https://get.maestro.mobile.dev" | bash
+      - name: Setup maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
