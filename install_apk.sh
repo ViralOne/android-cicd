@@ -42,10 +42,13 @@ else
     exit 1
 fi
 
+echo "Starting screenrecord"
+$ADB emu screenrecord start --time-limit 460 maestro.webm
+
 # Start Maestro test
 echo "Starting Maestro..."
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=$TIMEOUT
-if maestro test -e APP_ID=org.wikipedia --no-ansi flow.yaml; then
+if maestro test -e APP_ID=org.wikipedia --format=junit --output=result.xml --no-ansi flow.yaml; then
     echo "Maestro test completed successfully."
 else
     echo "Maestro test failed."
