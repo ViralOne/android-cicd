@@ -37,4 +37,4 @@ jobs:
           api-level: 29
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false  
-          script: ./gradlew connectedCheck
+          script: ./install_apk.sh
