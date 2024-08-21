@@ -24,14 +24,14 @@ jobs:
       # - name: Gradle cache
       #   uses: gradle/gradle-build-action@v2
 
-      - name: setup maestro
+      - name: Setup maestro
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo $ANDROID_HOME
           export ANDROID_HOME=/usr/lib/android-sdk/
           echo $ANDROID_HOME
 
-      - name: run tests
+      - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
