@@ -20,6 +20,10 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Install dependencies
+        run: |
+          sudo apt update && sudo apt install -y unzip zip
+
       # - name: Gradle cache
       #   uses: gradle/gradle-build-action@v2
 
