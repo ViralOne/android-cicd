@@ -14,6 +14,6 @@ else
     echo "Maestro already installed"
 fi
 
-echo "Starting maestro"
+echo "Starting maestro "
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=20000 # setting 20 seconds
 maestro test -e APP_ID=org.wikipedia --no-ansi flow.yaml
