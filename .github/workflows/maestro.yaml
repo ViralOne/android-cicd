@@ -14,28 +14,14 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
 
       - name: Install dependencies
         run: |
-          sudo apt update && sudo apt install -y unzip zip android-sdk
-          export ANDROID_HOME=/usr/lib/android-sdk/
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-          echo $ANDROID_HOME
-          env
+          ./prepare_env.sh
 
-      # - name: Gradle cache
+          # - name: Gradle cache
+
       #   uses: gradle/gradle-build-action@v2
-
-      # - uses: dniHze/maestro-test-action@v1
-          
-      - name: Setup maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
