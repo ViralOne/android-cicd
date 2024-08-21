@@ -1,0 +1,35 @@
+name: Maestro test on emulator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - uses: dniHze/maestro-test-action@v1
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          ram-size: 4192M
+          target: google_apis
+          emulator-options: -no-window -no-snapshot -screen no-touch -noaudio -memory 2048 -no-boot-anim -gpu auto -camera-back none
+          script: ./github_action_install_apk.sh
+
+      # - name: Upload results
+      #   if: ${{ always() }}
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: maestro-report
+      #     path: |
+      #       ./**/.maestro/tests
+      #       /Users/runner/.maestro/tests/
+      #       report.xml
+      #       maestro.webm
