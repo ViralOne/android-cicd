@@ -1,14 +1,18 @@
 #!/bin/sh
 
+# Define constants for ADB and APK paths
 ADB="/usr/bin/adb"
 APK="./wiki.apk"
+MAESTRO_PATH="/usr/local/bin/maestro"
+MAESTRO_BIN="$HOME/.maestro/bin"
+TIMEOUT=30000
 
-# echo "Starting screenrecord"
-# $ADB emu screenrecord start --time-limit 460 maestro.webm
-if [ ! -f "/usr/local/bin/maestro" ]; then
-    export PATH="$PATH":"$HOME/.maestro/bin"
+# Check if Maestro is installed
+if [ ! -f "$MAESTRO_PATH" ]; then
+    echo "Maestro not found. Adding to PATH."
+    export PATH="$PATH:$MAESTRO_BIN"
 else
-    echo "Maestro already installed"
+    echo "Maestro is already installed."
 fi
 
 # List connected ADB devices and filter for the device ID
@@ -22,17 +26,28 @@ fi
 
 # Connect to the specified device
 echo "Connecting to device $device_id..."
-adb connect "$device_id"
-
-# Check if the connection was successful
-if [ $? -eq 0 ]; then
+if adb connect "$device_id"; then
     echo "Successfully connected to $device_id."
-    echo "Installing APK"
-    $ADB install $APK
 else
     echo "Failed to connect to $device_id."
+    exit 1
 fi
 
-echo "Starting maestro "
-export MAESTRO_DRIVER_STARTUP_TIMEOUT=20000 # setting 20 seconds
-maestro test -e APP_ID=org.wikipedia --no-ansi flow.yaml
+# Install the APK
+echo "Installing APK..."
+if $ADB install "$APK"; then
+    echo "APK installed successfully."
+else
+    echo "Failed to install APK."
+    exit 1
+fi
+
+# Start Maestro test
+echo "Starting Maestro..."
+export MAESTRO_DRIVER_STARTUP_TIMEOUT=$TIMEOUT
+if maestro test -e APP_ID=org.wikipedia --no-ansi flow.yaml; then
+    echo "Maestro test completed successfully."
+else
+    echo "Maestro test failed."
+    exit 1
+fi
