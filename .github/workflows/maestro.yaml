@@ -22,7 +22,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update && sudo apt install -y unzip zip
+          sudo apt update && sudo apt install -y unzip zip android-sdk
+          export ANDROID_HOME=/usr/lib/android-sdk/
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
       # - name: Gradle cache
       #   uses: gradle/gradle-build-action@v2
