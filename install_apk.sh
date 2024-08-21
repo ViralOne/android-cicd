@@ -14,10 +14,26 @@ else
     echo "Maestro already installed"
 fi
 
-#Show adb devices
-$ADB devices
+# List connected ADB devices and filter for the device ID
+device_id=$(adb devices | awk 'NR==2 {print $1}')
 
-adb install wiki.apk
+# Check if a device ID was found
+if [ -z "$device_id" ]; then
+    echo "No ADB devices found. Exiting."
+    exit 1
+fi
+
+# Connect to the specified device
+echo "Connecting to device $device_id..."
+adb connect "$device_id"
+
+# Check if the connection was successful
+if [ $? -eq 0 ]; then
+    echo "Successfully connected to $device_id."
+    adb install wiki.apk
+else
+    echo "Failed to connect to $device_id."
+fi
 
 echo "Starting maestro "
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=20000 # setting 20 seconds
