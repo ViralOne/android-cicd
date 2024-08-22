@@ -1,6 +1,9 @@
 name: Maestro test on emulator
 
-on: push
+on:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   test:
