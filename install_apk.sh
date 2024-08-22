@@ -7,8 +7,6 @@ MAESTRO_PATH="/usr/local/bin/maestro"
 MAESTRO_BIN="$HOME/.maestro/bin"
 TIMEOUT=30000
 
-source ./install_apk.sh
-
 # Check if Maestro is installed
 if [ ! -f "$MAESTRO_PATH" ]; then
     echo "Maestro not found. Adding to PATH."

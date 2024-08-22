@@ -5,6 +5,9 @@ on: push
 jobs:
   test:
     runs-on: self-hosted
+    env:
+      ANDROID_HOME: /usr/lib/android-sdk/
+
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -23,7 +26,7 @@ jobs:
         run: |
           export ANDROID_HOME=/usr/lib/android-sdk/
           echo "ANDROID_HOME set to $ANDROID_HOME"
-          
+
       - name: Run your build run
         run: |
           echo "Running build with ANDROID_HOME=$ANDROID_HOME"
