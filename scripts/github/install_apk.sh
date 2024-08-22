@@ -22,18 +22,9 @@ if [ -z "$device_id" ]; then
     exit 1
 fi
 
-# Connect to the specified device
-echo "Connecting to device $device_id..."
-if adb connect "$device_id"; then
-    echo "Successfully connected to $device_id."
-else
-    echo "Failed to connect to $device_id."
-    exit 1
-fi
-
 # Install the APK
 echo "Installing APK..."
-if $ADB install "$APK"; then
+if $ADB -s "$device_id" install "$APK"; then
     echo "APK installed successfully."
 else
     echo "Failed to install APK."

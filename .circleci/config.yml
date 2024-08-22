@@ -2,7 +2,6 @@ version: 2.1
  
 orbs:
   android: circleci/android@2.5.0
-  app-distribution: tadashi0713/app-distribution@1.2.0
 
 commands:
   install-maestro:
@@ -17,7 +16,7 @@ commands:
     steps:
       - run:
           name: Run checks & tests
-          command: ./ci_setup.sh
+          command: ./scripts/circleci/ci_setup.sh
 
 jobs:
   test:
@@ -41,26 +40,3 @@ workflows:
   test:
     jobs:
       - test
-
-
-
-
-# jobs:
-#   deploy:
-#     docker:
-#       - image: cimg/android:2024.08.1
-#     environment:
-#       DEPLOY_DIR: deploy
-#     steps:
-#       - checkout
-#       - app-distribution/upload_android:
-#           path: wiki.apk
-#       - run-maestro
-
-# workflows:
-#   main:
-#     jobs:
-#       - deploy:
-#           context:
-#             - mobile
-#             - app-distribution
