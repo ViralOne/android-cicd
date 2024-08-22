@@ -1,36 +1,39 @@
 # .circleci/config.yml
 version: 2.1
 orbs:
-  android: circleci/android@2.4.0
-  # https://circleci.com/developer/orbs/orb/circleci/android for latest version
+  android: circleci/android@2.5.0
+
+commands:
+  install-maestro:
+    steps:
+      - run:
+          name: Install Maestro
+          command: |
+            curl -Ls "https://get.maestro.mobile.dev" | bash
+            export PATH="$PATH":"$HOME/.maestro/bin
+
+  run-maestro:
+    steps:
+      - run:
+          name: Run checks & tests
+          command: ./install_apk.sh
 jobs:
   test:
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2021.10.1
+      tag: default
     steps:
       - checkout
-      # Create an AVD named "myavd"
+      - install-maestro
       - android/create-avd:
-          avd-name: myavd
+          avd-name: ademu
           system-image: system-images;android-29;default;x86
           install: true
-      # By default, after starting up the emulator, a cache will be restored,
-      # "./gradlew assembleDebugAndroidTest" will be run and then a script
-      # will be run to wait for the emulator to start up.
-      # Specify the "post-emulator-launch-assemble-command" command to override
-      # the gradle command run, or set "wait-for-emulator" to false to disable
-      # waiting for the emulator altogether.
       - android/start-emulator:
-          avd-name: myavd
+          avd-name: ademu
           no-window: true
-          restore-gradle-cache-prefix: v1a
-      # Runs "./gradlew connectedDebugAndroidTest" by default.
-      # Specify the "test-command" parameter to customize the command run.
-      - android/run-tests
-      - android/save-gradle-cache:
-          cache-prefix: v1a
+      - run-maestro
 workflows:
   test:
     jobs:
