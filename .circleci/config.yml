@@ -34,6 +34,7 @@ jobs:
           install: true
           system-image: system-images;android-29;default;x86
       - android/start-emulator:
+          post-emulator-launch-assemble-command: echo "Starting..."
           avd-name: myemulator
           no-window: true
       - run-maestro
