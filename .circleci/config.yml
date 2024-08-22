@@ -12,7 +12,6 @@ commands:
           command: |
             curl -Ls "https://get.maestro.mobile.dev" | bash
             echo 'export PATH="$PATH:$HOME/.maestro/bin"' >> $BASH_ENV
-            gradle wrapper
 
   run-maestro:
     steps:
