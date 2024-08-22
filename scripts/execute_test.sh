@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Define constants for ADB and APK paths
-ADB="/usr/bin/adb"
 APK="./wiki.apk"
 MAESTRO_BIN="$HOME/.maestro/bin"
+MAESTRO_TESTS="maestro/flow.yaml"
 TIMEOUT=30000
 
 if echo "$PATH" | grep -q ".maestro"; then
@@ -12,28 +12,19 @@ else
     echo ".maestro/bin is not in the PATH."
     export PATH="$PATH:$MAESTRO_BIN"
 fi
-
 # List connected ADB devices and filter for the device ID
 device_id=$(adb devices | awk 'NR==2 {print $1}')
 
 # Check if a device ID was found
 if [ -z "$device_id" ]; then
     echo "No ADB devices found. Exiting."
-    exit 1
-fi
-
-# Connect to the specified device
-echo "Connecting to device $device_id..."
-if adb connect "$device_id"; then
-    echo "Successfully connected to $device_id."
 else
-    echo "Failed to connect to $device_id."
-    exit 1
+    echo "Device found: $device_id..."
 fi
 
 # Install the APK
 echo "Installing APK..."
-if $ADB install "$APK"; then
+if adb -s "$device_id" install "$APK"; then
     echo "APK installed successfully."
 else
     echo "Failed to install APK."
@@ -46,7 +37,7 @@ $ADB emu screenrecord start --time-limit 460 maestro.webm
 # Start Maestro test
 echo "Starting Maestro..."
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=$TIMEOUT
-if maestro test -e APP_ID=org.wikipedia --format=junit --output=result.xml --no-ansi flow.yaml; then
+if maestro test -e APP_ID=org.wikipedia --format=junit --output=result.xml --no-ansi "$MAESTRO_TESTS"; then
     echo "Maestro test completed successfully."
 else
     echo "Maestro test failed."
