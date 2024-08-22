@@ -34,7 +34,7 @@ jobs:
 workflows:
   main:
     jobs:
-      - beta:
+      - deploy:
           context:
             - mobile
             - app-distribution
