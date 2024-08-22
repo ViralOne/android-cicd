@@ -19,8 +19,16 @@ jobs:
         run: |
           ./prepare_env.sh
 
-          # - name: Gradle cache
+      - name: Set up Android SDK
+        run: |
+          export ANDROID_HOME=/usr/lib/android-sdk/
+          echo "ANDROID_HOME set to $ANDROID_HOME"
+          
+      - name: Run your build run
+        run: |
+          echo "Running build with ANDROID_HOME=$ANDROID_HOME"
 
+      # - name: Gradle cache
       #   uses: gradle/gradle-build-action@v2
 
       - name: Run tests
