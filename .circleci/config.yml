@@ -1,7 +1,8 @@
-# .circleci/config.yml
 version: 2.1
+
 orbs:
   android: circleci/android@2.5.0
+  app-distribution: tadashi0713/app-distribution@1.2.0
 
 commands:
   install-maestro:
@@ -17,24 +18,23 @@ commands:
       - run:
           name: Run checks & tests
           command: ./install_apk.sh
+
 jobs:
-  test:
-    executor:
-      name: android/android-machine
-      resource-class: medium
-      tag: default
+  deploy:
+    docker:
+      - image: cimg/android:2024.01
+    environment:
+      DEPLOY_DIR: deploy
     steps:
       - checkout
-      - install-maestro
-      - android/create-avd:
-          avd-name: ademu
-          system-image: system-images;android-29;default;x86
-          install: true
-      - android/start-emulator:
-          avd-name: ademu
-          no-window: true
+      - app-distribution/upload_android:
+          path: wiki.apk
       - run-maestro
+
 workflows:
-  test:
+  main:
     jobs:
-      - test
+      - beta:
+          context:
+            - mobile
+            - app-distribution
