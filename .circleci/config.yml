@@ -21,7 +21,7 @@ jobs:
   test:
     executor:
       name: android/android-machine
-      resource-class: large
+      resource-class: medium
       tag: default
     steps:
       - checkout
