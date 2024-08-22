@@ -16,7 +16,7 @@ commands:
     steps:
       - run:
           name: Run checks & tests
-          command: ./scripts/circleci/ci_setup.sh
+          command: ./scripts/execute_test.sh
 
 jobs:
   test:
