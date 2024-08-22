@@ -7,27 +7,19 @@ TIMEOUT=30000
 
 export PATH="$PATH:$MAESTRO_BIN"
 
-# # List connected ADB devices and filter for the device ID
-# device_id=$(adb devices | awk 'NR==2 {print $1}')
+# List connected ADB devices and filter for the device ID
+device_id=$(adb devices | awk 'NR==2 {print $1}')
 
-# # Check if a device ID was found
-# if [ -z "$device_id" ]; then
-#     echo "No ADB devices found. Exiting."
-#     exit 1
-# fi
-
-# # Connect to the specified device
-# echo "Connecting to device $device_id..."
-# if adb connect "$device_id"; then
-#     echo "Successfully connected to $device_id."
-# else
-#     echo "Failed to connect to $device_id."
-#     exit 1
-# fi
+# Check if a device ID was found
+if [ -z "$device_id" ]; then
+    echo "No ADB devices found. Exiting."
+else
+    echo "Device found: $device_id..."
+fi
 
 # Install the APK
 echo "Installing APK..."
-if adb install "$APK"; then
+if adb -s "$device_id" install "$APK"; then
     echo "APK installed successfully."
 else
     echo "Failed to install APK."
