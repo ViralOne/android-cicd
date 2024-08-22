@@ -17,12 +17,12 @@ commands:
     steps:
       - run:
           name: Run checks & tests
-          command: ./install_apk.sh
+          command: ./ci_setup.sh
 
 jobs:
   deploy:
     docker:
-      - image: cimg/android:2024.01
+      - image: cimg/android:2024.08-ndk
     environment:
       DEPLOY_DIR: deploy
     steps:
