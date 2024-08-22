@@ -3,16 +3,14 @@
 # Define constants for ADB and APK paths
 ADB="/usr/bin/adb"
 APK="./wiki.apk"
-MAESTRO_PATH="/usr/local/bin/maestro"
 MAESTRO_BIN="$HOME/.maestro/bin"
 TIMEOUT=30000
 
-# Check if Maestro is installed
-if [ ! -f "$MAESTRO_PATH" ]; then
-    echo "Maestro not found. Adding to PATH."
-    export PATH="$PATH:$MAESTRO_BIN"
+if echo "$PATH" | grep -q ".maestro"; then
+    echo ".maestro/bin is in the PATH."
 else
-    echo "Maestro is already installed."
+    echo ".maestro/bin is not in the PATH."
+    export PATH="$PATH:$MAESTRO_BIN"
 fi
 
 # List connected ADB devices and filter for the device ID
