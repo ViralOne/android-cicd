@@ -22,7 +22,7 @@ commands:
 jobs:
   deploy:
     docker:
-      - image: cimg/android:2024.08-ndk
+      - image: cimg/android:2024.08.1
     environment:
       DEPLOY_DIR: deploy
     steps:
