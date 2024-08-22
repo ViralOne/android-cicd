@@ -20,21 +20,46 @@ commands:
           command: ./ci_setup.sh
 
 jobs:
-  deploy:
-    docker:
-      - image: cimg/android:2024.08.1
-    environment:
-      DEPLOY_DIR: deploy
+  test:
+    executor:
+      name: android/android-machine
+      resource-class: medium
+      tag: default
     steps:
       - checkout
-      - app-distribution/upload_android:
-          path: wiki.apk
+      - install-maestro
+      - android/create-avd:
+          avd-name: myemulator
+          install: true
+          system-image: system-images;android-29;default;x86
+      - android/start-emulator:
+          avd-name: myemulator
+          no-window: true
       - run-maestro
-
 workflows:
-  main:
+  test:
     jobs:
-      - deploy:
-          context:
-            - mobile
-            - app-distribution
+      - test
+
+
+
+
+# jobs:
+#   deploy:
+#     docker:
+#       - image: cimg/android:2024.08.1
+#     environment:
+#       DEPLOY_DIR: deploy
+#     steps:
+#       - checkout
+#       - app-distribution/upload_android:
+#           path: wiki.apk
+#       - run-maestro
+
+# workflows:
+#   main:
+#     jobs:
+#       - deploy:
+#           context:
+#             - mobile
+#             - app-distribution

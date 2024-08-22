@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Define constants for ADB and APK paths
-ADB="/usr/bin/adb"
 APK="./wiki.apk"
 MAESTRO_BIN="$HOME/.maestro/bin"
 TIMEOUT=30000
@@ -28,7 +27,7 @@ export PATH="$PATH:$MAESTRO_BIN"
 
 # Install the APK
 echo "Installing APK..."
-if $ADB install "$APK"; then
+if adb install "$APK"; then
     echo "APK installed successfully."
 else
     echo "Failed to install APK."
