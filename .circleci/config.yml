@@ -1,5 +1,5 @@
 version: 2.1
- 
+
 commands:
   install-maestro:
     steps:
@@ -8,6 +8,15 @@ commands:
           command: |
             curl -Ls "https://get.maestro.mobile.dev" | bash
             echo 'export PATH="$PATH:$HOME/.maestro/bin"' >> $BASH_ENV
+
+  setup-avd:
+    steps:
+      - run:
+          name: Setup AVD
+          command: |
+            echo "no" | sdkmanager --install "system-images;android-33;google_apis;x86"
+            echo "no" | avdmanager create avd -n test_avd -k "system-images;android-33;google_apis;x86" --force
+            nohup emulator -avd test_avd -no-window -no-audio -gpu swiftshader_indirect &
 
   run-maestro:
     steps:
@@ -22,7 +31,9 @@ jobs:
     steps:
       - checkout
       - install-maestro
+      - setup-avd
       - run-maestro
+
 workflows:
   test:
     jobs:
