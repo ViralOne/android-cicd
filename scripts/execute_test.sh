@@ -46,12 +46,35 @@ while true; do
     sleep 5
 done
 
-# List connected ADB devices and filter for the device ID
-device_id=$(adb devices | awk 'NR==2 {print $1}')
+# Function to check device state
+check_device() {
+    local max_attempts=30
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        # Get device ID and state
+        local device_info=$(adb devices | awk 'NR==2 {print $0}')
+        device_id=$(echo "$device_info" | awk '{print $1}')
+        local state=$(echo "$device_info" | awk '{print $2}')
+        
+        if [ -z "$device_id" ]; then
+            echo "Attempt $attempt: No device found"
+        elif [ "$state" != "device" ]; then
+            echo "Attempt $attempt: Device $device_id is in $state state"
+        else
+            echo "Device $device_id is ready"
+            return 0
+        fi
+        
+        attempt=$((attempt + 1))
+        sleep 2
+    done
+    
+    echo "Failed to detect ready device after $max_attempts attempts"
+    return 1
+}
 
-# Check if a device ID was found
-if [ -z "$device_id" ]; then
-    echo "No ADB devices found. Exiting."
+if ! check_device; then
     exit 1
 else
     echo "Device found: $device_id..."
