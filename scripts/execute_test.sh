@@ -26,7 +26,25 @@ fi
 # Start Android emulator
 echo "Starting Android emulator..."
 emulator -avd "$AVD_NAME" -no-window -no-audio -gpu swiftshader_indirect &
-sleep 60  # Wait for the emulator to fully boot
+
+# Wait for emulator to boot with timeout
+BOOT_TIMEOUT=300
+BOOT_START_TIME=$(date +%s)
+while true; do
+    if adb shell getprop sys.boot_completed 2>/dev/null | grep -q "1"; then
+        echo "Emulator booted successfully"
+        break
+    fi
+    
+    CURRENT_TIME=$(date +%s)
+    if [ $((CURRENT_TIME - BOOT_START_TIME)) -gt $BOOT_TIMEOUT ]; then
+        echo "Timeout waiting for emulator to boot"
+        exit 1
+    fi
+    
+    echo "Waiting for emulator to boot..."
+    sleep 5
+done
 
 # List connected ADB devices and filter for the device ID
 device_id=$(adb devices | awk 'NR==2 {print $1}')
