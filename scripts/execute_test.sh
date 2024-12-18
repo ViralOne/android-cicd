@@ -12,12 +12,29 @@ else
     echo ".maestro/bin is not in the PATH."
     export PATH="$PATH:$MAESTRO_BIN"
 fi
+
+# List available AVDs and select the first one
+AVD_NAME=$($ANDROID_HOME/emulator/emulator -list-avds | head -n 1)
+
+if [ -z "$AVD_NAME" ]; then
+    echo "No AVDs found. Exiting."
+    exit 1
+else
+    echo "Using AVD: $AVD_NAME"
+fi
+
+# Start Android emulator
+echo "Starting Android emulator..."
+emulator -avd "$AVD_NAME" -no-window -no-audio -gpu swiftshader_indirect &
+sleep 60  # Wait for the emulator to fully boot
+
 # List connected ADB devices and filter for the device ID
 device_id=$(adb devices | awk 'NR==2 {print $1}')
 
 # Check if a device ID was found
 if [ -z "$device_id" ]; then
     echo "No ADB devices found. Exiting."
+    exit 1
 else
     echo "Device found: $device_id..."
 fi
@@ -32,7 +49,7 @@ else
 fi
 
 echo "Starting screenrecord"
-$ADB emu screenrecord start --time-limit 460 maestro.webm
+adb emu screenrecord start --time-limit 460 maestro.webm
 
 # Start Maestro test
 echo "Starting Maestro..."
